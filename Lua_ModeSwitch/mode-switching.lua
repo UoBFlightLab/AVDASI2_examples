@@ -4,8 +4,8 @@
 --# Example script for AVDASI2 UAV build unit
 --# Enables switching of specified servo outputs between RC and ground station control
 --# Author: Sid Reid
---# Adapted from [LINK]
---# Useful documentation: [LINK]
+--# Adapted from https://github.com/ArduPilot/ardupilot/blob/master/libraries/AP_Scripting/applets/winch-control.lua
+--# Useful documentation: https://ardupilot.org/plane/docs/common-lua-scripts.html#getting-started
 --####################
 
 ---@diagnostic disable: param-type-mismatch
@@ -71,12 +71,12 @@ function update() -- we run this whole function every UPDATE_INTERVAL_MS by call
 
   -- set servo function based on switch position *** THIS IS WHERE YOU SET YOUR SERVOS ETC UP
   if rc_switch_pos == 0 then -- LOW, Manual RC Control
-    param:set("SERVO1_FUNCTION",4) -- SERVO1_FUNCTION (the servo plugged into Main1) is set to '4' which tells it that it's an aileron
-    gcs:send_text(6, string.format("Servo %d function set to %d", 1, 4))
+    param:set("SERVO2_FUNCTION",19) -- Servo2 (usually elevator) is set to '19' which tells it that it's an elevator
+    gcs:send_text(6, string.format("AVDASI2: Servo %d function set to %d", 1, 19))
   end
   if rc_switch_pos == 2 then -- HIGH, TELEM Servo Control
-    param:set("SERVO1_FUNCTION",0) -- SERVO1_FUNCTION is set to '0' which tells it that it's disabled, so we can control it from GCS
-    gcs:send_text(6, string.format("Servo %d function set to %d", 1, 0))
+    param:set("SERVO2_FUNCTION",0) -- SERVO2_FUNCTION is set to '0' which tells it that it's disabled, so we can control it from GCS
+    gcs:send_text(6, string.format("AVDASI2: Servo %d function set to %d", 1, 0))
   end
 
   return update, UPDATE_INTERVAL_MS  -- run the 'update' function again after UPDATE_INTERVAL_MS
