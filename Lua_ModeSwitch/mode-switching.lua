@@ -4,8 +4,8 @@
 --# Example script for AVDASI2 UAV build unit
 --# Enables switching of specified servo outputs between RC and ground station control
 --# Author: Sid Reid
---# Adapted from [LINK]
---# Useful documentation: [LINK]
+--# Adapted from https://github.com/ArduPilot/ardupilot/blob/master/libraries/AP_Scripting/applets/winch-control.lua
+--# Useful documentation: https://ardupilot.org/plane/docs/common-lua-scripts.html#getting-started
 --####################
 
 ---@diagnostic disable: param-type-mismatch
