@@ -39,7 +39,7 @@ assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 3), "AVDASI2: could 
   // @Values: 300:Scripting1, 301:Scripting2, 302:Scripting3, 303:Scripting4, 304:Scripting5, 305:Scripting6, 306:Scripting7, 307:Scripting8
   // @User: Standard
 --]]
-local RC_SCRIPTING = bind_add_param('RC_FUNC', 3, 300) -- create a parameter called 'RC_FUNC', in position 3 in the table (just because), and look for changes in the RC input mapped to 'Scripting1' in Mission Planner
+local RC_SCRIPTING = bind_add_param('RC_FUNC', 3, 300) -- create a parameter called 'RC_FUNC', in position 3 in the table (just because), and look for changes in the RC input mapped to 'Scripting1' (which is what the '301' means) in Mission Planner
 
 -- local variables and definitions
 local UPDATE_INTERVAL_MS = 100 -- check for changes 10x/second
