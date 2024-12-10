@@ -4,7 +4,8 @@
 --# Enables switching of specified servo outputs between RC and ground station control
 --# Author: Sid Reid
 --# Adapted from https://github.com/ArduPilot/ardupilot/blob/master/libraries/AP_Scripting/applets/winch-control.lua
---# Useful background: https://ardupilot.org/dev/docs/common-lua-scripts.html
+--# Useful background - FOLLOW THIS TO ENABLE SCRIPTING: https://ardupilot.org/dev/docs/common-lua-scripts.html
+--#
 --# TODO: looks like this could be done from Mission Planner's Aux Function screen too - check this https://github.com/ArduPilot/ardupilot/blob/master/libraries/AP_Scripting/applets/winch-control.md 
 --# TODO: is this also a good example of how to do things more elegantly? Not sure https://github.com/ArduPilot/ardupilot/blob/ArduPlane-stable/libraries/AP_Scripting/examples/servo_set_get.lua
 --# 
