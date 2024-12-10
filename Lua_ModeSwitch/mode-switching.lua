@@ -1,11 +1,26 @@
--- comments in luascript start with '--'
-
---####################
+--#################### comments in luascript start with '--', the '#'s are just for visibility of this header
+--#
 --# Example script for AVDASI2 UAV build unit
 --# Enables switching of specified servo outputs between RC and ground station control
 --# Author: Sid Reid
 --# Adapted from https://github.com/ArduPilot/ardupilot/blob/master/libraries/AP_Scripting/applets/winch-control.lua
---# Useful documentation: https://ardupilot.org/plane/docs/common-lua-scripts.html#getting-started
+--# Useful background: https://ardupilot.org/dev/docs/common-lua-scripts.html
+--# TODO: looks like this could be done from Mission Planner's Aux Function screen too - check this https://github.com/ArduPilot/ardupilot/blob/master/libraries/AP_Scripting/applets/winch-control.md 
+--# 
+--# 
+--# You need to:
+--#   1. Map a switch on your controller to an output channel (see the Taranis manual) - use a channel that isn't mapped to a flight control!
+--#   2. Set the 'RCnn_OPTION' (for channel 'nn') in Mission Planner to '300' (which makes it run 'Scripting1' on change)
+--#   
+--# This script does the following:
+--#   Creates a parameter called 'AVDASI2_RC_FUNC' 
+--#   Which looks for changes in the RC input mapped to 'Scripting1'
+--#   And runs the update() function below repeatedly, but with a delay of UPDATE_INTERVAL_MS so it doesn't time out or overwhelm the controller
+--#   update() (as currently coded) changes SERVO2 (which is usually the elevator) from 'elevator' to 'disabled', so the autopilot will ignore it and you can move it manually
+--#
+--# To actually run this, your flight controller needs to be armed - you may need to disable some of the prearming checks as you're not actually flying
+--# Edit ARMING_CHECK parameter, hit 'set bitmask' for the options here.
+--# 
 --####################
 
 ---@diagnostic disable: param-type-mismatch
@@ -39,7 +54,7 @@ assert(param:add_table(PARAM_TABLE_KEY, PARAM_TABLE_PREFIX, 3), "AVDASI2: could 
   // @Values: 300:Scripting1, 301:Scripting2, 302:Scripting3, 303:Scripting4, 304:Scripting5, 305:Scripting6, 306:Scripting7, 307:Scripting8
   // @User: Standard
 --]]
-local RC_SCRIPTING = bind_add_param('RC_FUNC', 3, 300) -- create a parameter called 'RC_FUNC', in position 3 in the table (just because), and look for changes in the RC input mapped to 'Scripting1' (which is what the '301' means) in Mission Planner
+local RC_SCRIPTING = bind_add_param('RC_FUNC', 1, 300) -- creates a parameter called 'AVDASI2_RC_FUNC' (prefix is from the global definitions section above), in position 1 in the table, and look for changes in the RC input mapped to 'Scripting1' (which is what the '300' means) in Mission Planner
 
 -- local variables and definitions
 local UPDATE_INTERVAL_MS = 100 -- check for changes 10x/second
@@ -69,9 +84,18 @@ function update() -- we run this whole function every UPDATE_INTERVAL_MS by call
   end
   last_rc_switch_pos = rc_switch_pos -- if things have changed then update last position
 
-  -- set servo function based on switch position *** THIS IS WHERE YOU SET YOUR SERVOS ETC UP
+
+--####################
+--#
+--# THIS IS WHERE YOU SET YOUR SERVOS ETC UP
+--# Check out the list of servo function settings in Mission Planner/Config/Full parameter list/SERVOn_FUNCTION (n=1,2,3,...)
+--# You'll also need to set up your RC and 
+--# 
+--####################
+
+  -- set servo function based on switch position 
   if rc_switch_pos == 0 then -- LOW, Manual RC Control
-    param:set("SERVO2_FUNCTION",19) -- Servo2 (usually elevator) is set to '19' which tells it that it's an elevator
+    param:set("SERVO2_FUNCTION",19) -- Servo2 (usually elevator - check your setup) is set to '19' which tells it that it's an elevator
     gcs:send_text(6, string.format("AVDASI2: Servo %d function set to %d", 1, 19))
   end
   if rc_switch_pos == 2 then -- HIGH, TELEM Servo Control
